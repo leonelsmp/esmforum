@@ -23,3 +23,27 @@ test('Testando cadastro de três perguntas', () => {
   expect(perguntas[2].num_respostas).toBe(0);
   expect(perguntas[1].id_pergunta).toBe(perguntas[2].id_pergunta-1);
 });
+
+test('Testando cadastro de resposta', () => {
+  modelo.cadastrar_pergunta('Qual o país com maior área do mundo?');
+  modelo.cadastrar_pergunta('Qual o valor de PI?');
+  const perguntas = modelo.listar_perguntas(); 
+  
+  modelo.cadastrar_resposta(perguntas[0].id_pergunta,'Rússia!');
+  modelo.cadastrar_resposta(perguntas[0].id_pergunta, 'O país com maior área do mundo é a Rússia!');
+  modelo.cadastrar_resposta(perguntas[1].id_pergunta, '3.14');
+  
+  var respostas_p0 =  modelo.get_num_respostas(perguntas[0].id_pergunta);
+  var respostas_p1 =  modelo.get_num_respostas(perguntas[1].id_pergunta);
+  expect(respostas_p0).toBe(2);
+  expect(respostas_p1).toBe(1);
+
+  expect(modelo.get_pergunta(perguntas[0].id_pergunta).texto ).toBe('Qual o país com maior área do mundo?');
+  expect(modelo.get_pergunta(perguntas[1].id_pergunta).texto ).toBe('Qual o valor de PI?');
+
+  expect(modelo.get_respostas(perguntas[0].id_pergunta)[0].texto ).toBe('Rússia!');
+  expect(modelo.get_respostas(perguntas[0].id_pergunta)[1].texto ).toBe('O país com maior área do mundo é a Rússia!');
+  expect(modelo.get_respostas(perguntas[1].id_pergunta)[0].texto ).toBe('3.14');
+  expect(modelo.get_respostas(perguntas[0].id_pergunta)[0].id_resposta).toBe(modelo.get_respostas(perguntas[0].id_pergunta)[1].id_resposta -1);
+});
+
